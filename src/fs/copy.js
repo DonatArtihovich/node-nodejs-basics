@@ -1,9 +1,11 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url';
+const __dirname = fileURLToPath(path.dirname(import.meta.url))
 
 const copy = async () => {
-    const dir = path.resolve('files');
-    const newDir = path.resolve('files_copy');
+    const dir = path.join(__dirname, 'files');
+    const newDir = path.join(__dirname, 'files_copy');
 
     fs.access(dir, err => {
         if (err) throw new Error('FS operation failed')
@@ -22,8 +24,8 @@ const copy = async () => {
 
         files.forEach(file => {
             fs.copyFile(
-                path.resolve(dir, file),
-                path.resolve(newDir, file),
+                path.join(__dirname, dir, file),
+                path.join(__dirname, newDir, file),
                 err => {
                     if (err) throw err;
                 })
