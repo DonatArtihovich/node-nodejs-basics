@@ -6,12 +6,10 @@ const __dirname = fileURLToPath(path.dirname(import.meta.url))
 
 const spawnChildProcess = async (args) => {
     const processPath = path.join(__dirname, 'files', 'script.js')
-    const childProcess = ChildProcess.spawn(processPath, args);
+    const childProcess = ChildProcess.fork(processPath, args, { stdio: 'pipe' });
 
-    stdin.pipe(childProcess.stdin);
-    childProcess.stdout.on('data', data => {
-        stdout.write(data)
-    })
+    stdin.pipe(childProcess.stdin)
+    childProcess.stdout.pipe(stdout)
 };
 
 // Put your arguments in function call to test this functionality
