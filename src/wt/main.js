@@ -20,10 +20,10 @@ const performCalculations = async () => {
     for (let i = 0; i < numOfWorkers; i++) {
         const worker = new Worker(path.join(__dirname, 'worker.js'));
         worker.on('message', data => {
-            resultsArr.push({
+            resultsArr[i] = {
                 status: 'resolved',
                 data: data
-            })
+            }
 
             counter++
             if (counter === numOfWorkers) emitter.emit('messages')
