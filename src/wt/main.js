@@ -10,7 +10,6 @@ emitter.on('messages', () => {
     process.exit()
 })
 
-const workersArr = [];
 const resultsArr = [];
 let counter = 0;
 
@@ -18,7 +17,7 @@ const performCalculations = async () => {
     const numOfWorkers = os.cpus().length;
 
     for (let i = 0; i < numOfWorkers; i++) {
-        const worker = new Worker(path.join(__dirname, 'worker.js'));
+        const worker = new Worker(path.join(__dirname, 'worker.js'), { workerData: { message: i + 10 } });
         worker.on('message', data => {
             resultsArr[i] = {
                 status: 'resolved',
@@ -35,14 +34,7 @@ const performCalculations = async () => {
                 data: null
             })
         });
-
-        workersArr.push(worker);
     }
-
-    workersArr.reduce((num, worker) => {
-        worker.postMessage(num);
-        return num + 1
-    }, 10);
 };
 
 await performCalculations();
