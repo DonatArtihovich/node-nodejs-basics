@@ -11,12 +11,8 @@ const copy = async () => {
         if (err) throw new Error('FS operation failed')
     })
 
-    fs.access(newDir, err => {
-        if (!err) throw new Error('FS operation failed');
-    })
-
     fs.mkdir(newDir, err => {
-        if (err) throw err;
+        if (!err) throw new Error('FS operation failed');
     })
 
     fs.readdir(dir, (err, files) => {
@@ -24,8 +20,8 @@ const copy = async () => {
 
         files.forEach(file => {
             fs.copyFile(
-                path.join(__dirname, dir, file),
-                path.join(__dirname, newDir, file),
+                path.join(dir, file),
+                path.join(newDir, file),
                 err => {
                     if (err) throw err;
                 })
